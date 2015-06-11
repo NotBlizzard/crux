@@ -1,0 +1,2 @@
+# crux
+Paste text easily.
