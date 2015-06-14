@@ -11,7 +11,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
   'twig.path' => __DIR__.'/views',
 ]);
 try {
-  $db = new PDO("pgsql:dbname=crux_db;host=localhost", $array['username'], $array['password']);
+  $db = new PDO("pgsql:dbname=$_SERVER['DATABASE_NAME'];host=$_SERVER['DATABASE_HOST']", $_SERVER['DATABASE_USERNAME'], $_SERVER['DATABASE_PASSWORD']);
 } catch (PDOException $e) {
   echo $e->getMessage();
 }
