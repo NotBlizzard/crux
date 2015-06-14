@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel='stylesheet' href='../custom.css' />
+  <script src="../app.js"></script>
+  <title>Crux</title>
+</head>
+<body>
+{% if error is defined %}
+  <h2 id='error'>Error: {{ error }}</h2>
+{% endif %}
+<h1>Crux</h1>
+<form action='/' method='POST'>
+  <textarea name='content' id='textarea'></textarea><br />
+  <input id='button' type='submit'>
+</body>
+</html>
