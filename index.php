@@ -12,22 +12,17 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 ]);
 
 try {
-  $db = new PDO("pgsql:dbname=".$_SERVER['DATABASE_NAME'].";host=".$_SERVER['DATABASE_HOST']."", $_SERVER['DATABASE_USERNAME'], $_SERVER['DATABASE_PASSWORD']);
+  if (isset($_SERVER["DATABASE_NAME"])) {
+    $db = new PDO("pgsql:dbname=".$_SERVER['DATABASE_NAME'].";host=".$_SERVER['DATABASE_HOST']."", $_SERVER['DATABASE_USERNAME'], $_SERVER['DATABASE_PASSWORD']);
+  } else {
+    $db = new PDO("pgsql:dbname=crux_db;host=localhost", 'postgres', 'anthony');
+  }
 } catch (PDOException $e) {
   echo $e->getMessage();
 }
 
 $app->get('/', function() use ($app) {
  return $app['twig']->render('hello.html.twig');
-});
-
-$app->get("/{id}", function($id) use ($app, $db) {
-  $st = $db->prepare("SELECT content FROM pastes WHERE id=(:id) LIMIT 1");
-  $st->execute([':id' => "$id"]);
-  $row = $st->fetch();
-  return $app['twig']->render('show.html.twig', [
-    'content' => $row['content']
-  ]);
 });
 
 $app->post('/', function(Request $request) use ($app, $db) {
@@ -40,6 +35,24 @@ $app->post('/', function(Request $request) use ($app, $db) {
 
   $id = $st->fetch()[0];
   return $app->redirect("/".$id);
+});
+
+
+$app->get("/{id}", function($id) use ($app, $db) {
+  $st = $db->prepare("SELECT content FROM pastes WHERE id=(:id) LIMIT 1");
+  $st->execute([':id' => "$id"]);
+  $row = $st->fetch();
+  return $app['twig']->render('show.html.twig', [
+    'content' => $row['content'],
+    'id'      => $id
+  ]);
+});
+
+$app->get("/raw/{id}", function($id) use ($app, $db) {
+  $st = $db->prepare("SELECT content FROM pastes WHERE id=(:id) LIMIT 1");
+  $st->execute([':id' => "$id"]);
+  $row = $st->fetch();
+  return $row['content'];
 });
 
 $app->run();
