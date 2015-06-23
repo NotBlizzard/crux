@@ -52,7 +52,9 @@ $app->get("/raw/{id}", function($id) use ($app, $db) {
   $st = $db->prepare("SELECT content FROM pastes WHERE id=(:id) LIMIT 1");
   $st->execute([':id' => "$id"]);
   $row = $st->fetch();
-  return $row['content'];
+  return $app['twig']->render('raw.html.twig', [
+    'content'  => $row['content']
+  ]);
 });
 
 $app->run();
