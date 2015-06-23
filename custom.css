@@ -32,6 +32,7 @@ input[type='submit'] {
 #raw {
     white-space: pre-wrap;
     text-align: left;
+    font-family: monospace;
 
 }
 #container{
@@ -40,7 +41,6 @@ input[type='submit'] {
   height: 600px;
   border: 1px solid black;
   margin: 0 auto;
-  margin: 10px auto;
   text-align: left;
   padding: 4px;
   overflow-y: scroll;
